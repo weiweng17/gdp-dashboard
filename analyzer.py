@@ -1,11 +1,56 @@
+try:
+    import tkinter as tk
+    from tkinter import filedialog, messagebox
+    HAS_TK = True
+except Exception:
+    HAS_TK = False
+    # 在无 GUI 环境中提供安全的 dummy 接口，避免调用时崩溃
+    class _DummyDialog:
+        @staticmethod
+        def askopenfilename(*args, **kwargs):
+            return ''
+        @staticmethod
+        def asksaveasfilename(*args, **kwargs):
+            return ''
+        @staticmethod
+        def askyesno(*args, **kwargs):
+            return False
+    filedialog = _DummyDialog()
+    messagebox = _DummyDialog()
+    tk = None
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from datetime import datetime, timedelta
 import warnings
-import tkinter as tk
-from tkinter import filedialog, messagebox
+try:
+    try:
+    import tkinter as tk
+    HAS_TK = True
+except Exception:
+    HAS_TK = False
+    tk = None
+    from tkinter import filedialog, messagebox
+    HAS_TK = True
+except Exception:
+    HAS_TK = False
+    # 在无 GUI 环境中提供安全的 dummy 接口，避免调用时崩溃
+    class _DummyDialog:
+        @staticmethod
+        def askopenfilename(*args, **kwargs):
+            return ''
+        @staticmethod
+        def asksaveasfilename(*args, **kwargs):
+            return ''
+        @staticmethod
+        def askyesno(*args, **kwargs):
+            return False
+    filedialog = _DummyDialog()
+    messagebox = _DummyDialog()
+    tk = None
+
 import os
 import sys
 from io import BytesIO
@@ -26,8 +71,32 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from datetime import datetime, timedelta
 import warnings
-import tkinter as tk
-from tkinter import filedialog, messagebox
+try:
+    try:
+    import tkinter as tk
+    HAS_TK = True
+except Exception:
+    HAS_TK = False
+    tk = None
+    from tkinter import filedialog, messagebox
+    HAS_TK = True
+except Exception:
+    HAS_TK = False
+    # 在无 GUI 环境中提供安全的 dummy 接口，避免调用时崩溃
+    class _DummyDialog:
+        @staticmethod
+        def askopenfilename(*args, **kwargs):
+            return ''
+        @staticmethod
+        def asksaveasfilename(*args, **kwargs):
+            return ''
+        @staticmethod
+        def askyesno(*args, **kwargs):
+            return False
+    filedialog = _DummyDialog()
+    messagebox = _DummyDialog()
+    tk = None
+
 import os
 import sys
 from io import BytesIO
