@@ -1,4 +1,4 @@
-import streamlit as st
+import os\nos.environ['MPLBACKEND']='Agg'\nimport streamlit as st
 import pandas as pd
 import numpy as np
 import sys
