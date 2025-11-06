@@ -1,10 +1,11 @@
+# --- 安全头部：保护 tkinter 导入并提供 headless fallback ---
 try:
     import tkinter as tk
     from tkinter import filedialog, messagebox
     HAS_TK = True
 except Exception:
     HAS_TK = False
-    # 在无 GUI 环境中提供安全的 dummy 接口，避免调用时崩溃
+    # headless 环境下提供最小 dummy 接口，避免导入时报错
     class _DummyDialog:
         @staticmethod
         def askopenfilename(*args, **kwargs):
@@ -15,46 +16,29 @@ except Exception:
         @staticmethod
         def askyesno(*args, **kwargs):
             return False
+    class _DummyRoot:
+        def withdraw(self): pass
+        def destroy(self): pass
+    class _DummyTkModule:
+        def Tk(self): return _DummyRoot()
     filedialog = _DummyDialog()
     messagebox = _DummyDialog()
-    tk = None
+    tk = _DummyTkModule()
 
+# 让后续代码使用常见库（保留 analyzer 原本会用到的）
+import os
+import sys
+from io import BytesIO
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from datetime import datetime, timedelta
 import warnings
-try:
-    try:
-    import tkinter as tk
-    HAS_TK = True
-except Exception:
-    HAS_TK = False
-    tk = None
-    from tkinter import filedialog, messagebox
-    HAS_TK = True
-except Exception:
-    HAS_TK = False
-    # 在无 GUI 环境中提供安全的 dummy 接口，避免调用时崩溃
-    class _DummyDialog:
-        @staticmethod
-        def askopenfilename(*args, **kwargs):
-            return ''
-        @staticmethod
-        def asksaveasfilename(*args, **kwargs):
-            return ''
-        @staticmethod
-        def askyesno(*args, **kwargs):
-            return False
-    filedialog = _DummyDialog()
-    messagebox = _DummyDialog()
-    tk = None
 
-import os
-import sys
-from io import BytesIO
-
+# 添加自定义模块路径（保留原行为）
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+# --- 头部结束，下面会追加原文件从 "# 修复Windows编码问题" 开始的内容 ---
 # 修复Windows编码问题
 if sys.platform == "win32":
     import io
